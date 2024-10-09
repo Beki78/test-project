@@ -6,6 +6,8 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./index.css";
 import Error from "./pages/error/Error";
 import Playlist from "./pages/playlist/Playlist";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const router = createBrowserRouter([
   {
@@ -21,5 +23,6 @@ const router = createBrowserRouter([
 createRoot(document.getElementById("root")!).render(
   <Provider store={store}>
     <RouterProvider router={router} />
+    <ToastContainer theme="dark" />
   </Provider>
 );

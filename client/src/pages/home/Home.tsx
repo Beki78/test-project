@@ -1,7 +1,9 @@
+import { useNavigate } from "react-router-dom";
 import Navbar from "../../components/Navbar/Navbar";
 import { Section, Title, Description, CallToAction } from "./HomeStyle";
 
 const Home = () => {
+  const navigate = useNavigate();
   return (
     <>
       <Navbar />
@@ -11,8 +13,9 @@ const Home = () => {
           Discover your passion for music with our expert guidance and top-notch
           facilities.
         </Description>
-        <CallToAction href="#services">Explore Our Services</CallToAction>
-        
+        <CallToAction onClick={() => navigate("/music")}>
+          Explore Our Services
+        </CallToAction>
       </Section>
     </>
   );
