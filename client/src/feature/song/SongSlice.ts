@@ -1,6 +1,7 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
+
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { SongType, SongsState } from "../../types/types";
+
 
 const initialState: SongsState = {
   songs: [] as SongType[],
@@ -8,10 +9,13 @@ const initialState: SongsState = {
   error: null,
 };
 
+
+//*Song Slice
 const songsSlice = createSlice({
   name: "songs",
   initialState,
   reducers: {
+    //*Fetch Song Reducer
     fetchSong: (state) => {
       state.isLoading = true;
       state.error = null;
@@ -25,20 +29,26 @@ const songsSlice = createSlice({
       state.isLoading = false;
       state.error = action.payload;
     },
+
+    //*Delete Song Reducer
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     deleteSong: (state, _action: PayloadAction<string>) => {
       state.isLoading = true;
       state.error = null;
     },
     deleteSongSuccess: (state, action: PayloadAction<string>) => {
       state.isLoading = false;
-      const id = action.payload; // Expecting this to be the _id
+      const id = action.payload;
       state.songs = state.songs.filter((song) => song._id !== id);
     },
     deleteSongFailure: (state, action: PayloadAction<string>) => {
       state.isLoading = false;
       state.error = action.payload;
     },
-    updateSong: (state, action: PayloadAction<SongType>) => {
+
+    //*Update Song Reducer
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    updateSong: (state, _action: PayloadAction<SongType>) => {
       state.isLoading = true;
       state.error = null;
     },
@@ -47,7 +57,7 @@ const songsSlice = createSlice({
         (song) => song._id === action.payload._id
       );
       if (index !== -1) {
-        state.songs[index] = action.payload; // Update the song in state directly
+        state.songs[index] = action.payload;
       }
       state.isLoading = false;
     },
@@ -55,10 +65,25 @@ const songsSlice = createSlice({
       state.isLoading = false;
       state.error = action.payload;
     },
+
+    //*Create Song Reducer
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    createSong: (state, _action: PayloadAction<SongType>) => {
+      state.isLoading = true;
+      state.error = null;
+    },
+    createSongSuccess: (state, action: PayloadAction<SongType>) => {
+      state.songs.push(action.payload);
+      state.isLoading = false;
+    },
+    createSongFailure: (state, action: PayloadAction<string>) => {
+      state.isLoading = false;
+      state.error = action.payload;
+    },
   },
 });
 
-// Action creators can be exported for use in components
+
 export const {
   fetchSong,
   fetchSongSuccess,
@@ -69,6 +94,9 @@ export const {
   updateSong,
   updateSongSuccess,
   updateSongFailure,
+  createSong,
+  createSongSuccess,
+  createSongFailure,
 } = songsSlice.actions;
 
 export default songsSlice.reducer;

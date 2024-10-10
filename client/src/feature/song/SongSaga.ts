@@ -9,12 +9,16 @@ import {
   updateSong,
   updateSongSuccess,
   updateSongFailure,
+  createSong,
+  createSongSuccess,
+  createSongFailure,
 } from "./SongSlice";
-import { fetchSongsApi, deleteSongApi, updateSongApi } from "../../api/api";
+import { fetchSongsApi, deleteSongApi, updateSongApi, createSongApi } from "../../api/api";
 import { SongType } from "../../types/types";
 import { toast } from "react-toastify";
 
-// Saga to fetch songs
+
+//*Fetch Song Saga
 export function* fetchSongSaga() {
   try {
     const songs: SongType[] = yield call(fetchSongsApi);
@@ -25,12 +29,13 @@ export function* fetchSongSaga() {
   }
 }
 
-// Watcher saga for fetching songs
 function* watchFetchSongsSaga() {
   yield takeEvery(fetchSong.type, fetchSongSaga);
 }
 
-// Saga to delete a song
+
+
+//*Delete Song Saga
 function* deleteSongSaga(action: ReturnType<typeof deleteSong>) {
   try {
     const id: string = action.payload!;
@@ -43,18 +48,21 @@ function* deleteSongSaga(action: ReturnType<typeof deleteSong>) {
   }
 }
 
-// Watcher saga for deleting songs
+
 function* watchDeleteSongSaga() {
   yield takeEvery(deleteSong.type, deleteSongSaga);
 }
 
+
+
+//*Update Song Saga
 function* updateSongSaga(action: ReturnType<typeof updateSong>) {
   try {
     const updatedSong: SongType = action.payload!;
-    const id: string = updatedSong._id; // Extract the ID from the updatedSong
-    yield call(updateSongApi, updatedSong, id); // Call the API with both parameters
-    yield put(updateSongSuccess(updatedSong)); // Dispatch success action
-    yield put(fetchSong()); // Fetch songs again to update the state
+    const id: string = updatedSong._id; 
+    yield call(updateSongApi, updatedSong, id); 
+    yield put(updateSongSuccess(updatedSong));
+    yield put(fetchSong()); 
     toast.success("Song updated successfully!");
   } catch (error) {
     yield put(updateSongFailure((error as Error).message));
@@ -66,11 +74,35 @@ function* watchUpdateSongSaga() {
   yield takeEvery(updateSong.type, updateSongSaga);
 }
 
-// Root saga
+
+
+//*Create Song Saga
+function* createSongSaga(action: ReturnType<typeof createSong>) {
+  try {
+    const newSong: SongType = action.payload!;
+    const createdSong: SongType = yield call(createSongApi, newSong);
+    yield put(createSongSuccess(createdSong));
+    toast.success("Song created successfully!");
+     yield put(fetchSong());
+  } catch (error) {
+    yield put(createSongFailure((error as Error).message));
+    toast.error("Failed to create the song.");
+
+  }
+}
+
+function* watchCreateSongSaga() {
+  yield takeEvery(createSong.type, createSongSaga);
+}
+
+
+
+//*Root Song Saga
 export default function* rootSaga() {
   yield all([
     watchFetchSongsSaga(),
     watchDeleteSongSaga(),
     watchUpdateSongSaga(),
+    watchCreateSongSaga(),
   ]);
 }

@@ -6,8 +6,8 @@ export const ErrorContainer = styled.div`
   align-items: center;
   justify-content: center;
   min-height: 100vh;
-  background-color: #000; /* Light red background */
-  color: #f39c12; /* Dark red text color */
+  background-color: #000; 
+  color: #f39c12; 
   text-align: center;
   padding: 2rem;
   border: 1px solid #f5c6cb;
