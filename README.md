@@ -1,5 +1,5 @@
 
-# Music Studio
+# Music Studio (ADDIS SOFTWARE TEST PROJECT)
 
 A simple React-based music management application that allows users to create, update, delete, and view songs easily. Featuring a state management with Redux and side effect handeling with Redux-Saga.
 
